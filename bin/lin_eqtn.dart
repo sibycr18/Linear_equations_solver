@@ -1,3 +1,9 @@
+/* ToDo:
+1. Function to find the cofactor of the matrix
+2. Function to find the transpose of the matrix
+3. Function to multiply matrices
+*/
+
 import 'dart:io';
 import 'dart:math';
 
@@ -73,7 +79,7 @@ void inputEquations() {
   }
 }
 
-List<List<int>> rcRemover(List<List<int>> C, int r, int c) {
+List<List<int>> rcRemover(List<List<int>> F, int r, int c) {
   List<List<int>> E = [
     [0, 0],
     [0, 0]
@@ -82,7 +88,7 @@ List<List<int>> rcRemover(List<List<int>> C, int r, int c) {
   for (int i = 0; i < row; i++) {
     for (int j = 0; j < row; j++) {
       if (i != r && j != c) {
-        D.add(C[i][j]);
+        D.add(F[i][j]);
       }
     }
   }
@@ -114,4 +120,13 @@ num determinant(List<List<int>> A) {
     return ((A[0][0] * A[1][1]) - (A[0][1] * A[1][0]));
   }
   return result;
+}
+
+void coFactor(List<List<int>> A) {
+  List<List<num>> C = [];
+  for (int i = 0; i < row; i++) {
+    for (int j = 0; j < row; j++) {
+      C[i][j] = pow(-1, (i + j)) * determinant(rcRemover(A, i, j));
+    }
+  }
 }
