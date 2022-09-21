@@ -2,6 +2,10 @@
 1. Function to find the cofactor of the matrix
 2. Function to find the transpose of the matrix
 3. Function to multiply matrices
+
+Find transpose of the cofactor matrix of A and divide it by determinant of A we get adj A.
+Multiply it with matrix B and we get the result.
+
 */
 
 import 'dart:io';
