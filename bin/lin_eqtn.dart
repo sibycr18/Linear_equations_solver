@@ -1,7 +1,6 @@
 /* ToDo:
-1. Function to find the cofactor of the matrix
-2. Function to find the transpose of the matrix
-3. Function to multiply matrices
+1. Function to find the transpose of the matrix
+2. Function to multiply matrices
 *********************
 
 *Notes*:
@@ -51,6 +50,9 @@ void main() {
   inputEquations(); //Read equations
   print("");
   print("Determinant is ${determinant(A)}");
+  num det = determinant(A);
+  List<List<num>> transA = transpose(coFactor(A));
+  List<List<num>> adjA = adjoint(transA, det);
 }
 
 void inputEquations() {
@@ -112,14 +114,18 @@ List<List<int>> rcRemover(List<List<int>> F, int r, int c) {
     }
   }
   int m = 0;
-  for (int i = 0; i < 2; i++) {
-    for (int j = 0; j < 2; j++) {
-      E[i][j] = D[m];
-      m++;
+  if (F.length == 3) {
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        E[i][j] = D[m];
+        m++;
+      }
     }
+    return E;
+  } else {
+    E[0][0] = D[0];
+    return E;
   }
-
-  return E;
 }
 
 num determinant(List<List<int>> A) {
@@ -129,16 +135,67 @@ num determinant(List<List<int>> A) {
       result += (pow(-1, i) * A[0][i]) * determinant(rcRemover(A, 0, i));
     }
   } else {
-    return ((A[0][0] * A[1][1]) - (A[0][1] * A[1][0]));
+    if (A.length == 2) {
+      return ((A[0][0] * A[1][1]) - (A[0][1] * A[1][0]));
+    } else {
+      return A[0][0];
+    }
   }
   return result;
 }
 
-void coFactor(List<List<int>> A) {
-  List<List<num>> C = [];
+List<List<num>> coFactor(List<List<int>> A) {
+  List<num> C = [];
+  List<List<num>> P = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
+  ];
+  List<List<num>> Q = [
+    [0, 0],
+    [0, 0]
+  ];
+  if (A.length == 3) {
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < row; j++) {
+        C.add(pow(-1, (i + j)) * determinant(rcRemover(A, i, j)));
+      }
+    }
+    int m = 0;
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < row; j++) {
+        P[i][j] = C[m];
+        m++;
+      }
+    }
+    return P;
+  } else {
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < row; j++) {
+        // print(pow(-1, (i + j)) * rcRemover(A, i, j)[0][0]);
+        C.add(pow(-1, (i + j)) * rcRemover(A, i, j)[0][0]);
+      }
+    }
+    int m = 0;
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < row; j++) {
+        Q[i][j] = C[m];
+        m++;
+      }
+    }
+    return Q;
+  }
+}
+
+List<List<num>> adjoint(List<List<num>> coF, num det) {
   for (int i = 0; i < row; i++) {
     for (int j = 0; j < row; j++) {
-      C[i][j] = pow(-1, (i + j)) * determinant(rcRemover(A, i, j));
+      coF[i][j] /= det;
     }
   }
+  return coF;
+}
+
+List<List<num>> transpose(List<List<num>> C) {
+  return [[]];
 }
