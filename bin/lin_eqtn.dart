@@ -2,11 +2,26 @@
 1. Function to find the cofactor of the matrix
 2. Function to find the transpose of the matrix
 3. Function to multiply matrices
+*********************
 
+*Notes*:
 Find transpose of the cofactor matrix of A and divide it by determinant of A we get adj A.
 Multiply it with matrix B and we get the result.
 
-*/
+*********************
+
+
+***** Codes ******
+
+// print Matrix A
+for (int i = 0; i < row; i++) {
+  for (int j = 0; j < row; j++) {
+    print(A[i][j]);
+  }
+}
+
+********************
+  */
 
 import 'dart:io';
 import 'dart:math';
@@ -108,16 +123,9 @@ List<List<int>> rcRemover(List<List<int>> F, int r, int c) {
 }
 
 num determinant(List<List<int>> A) {
-//print Matriz A
-//   for (int i = 0; i < row; i++) {
-//     for (int j = 0; j < row; j++) {
-//       print(A[i][j]);
-//     }
-//   }
-
   num result = 0;
-  if (row == 3) {
-    for (int i = 0; i < row; i++) {
+  if (A.length == 3) {
+    for (int i = 0; i < 3; i++) {
       result += (pow(-1, i) * A[0][i]) * determinant(rcRemover(A, 0, i));
     }
   } else {
