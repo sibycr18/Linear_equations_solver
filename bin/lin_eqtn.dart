@@ -1,16 +1,14 @@
 /* ToDo:
-1. Function to find the transpose of the matrix
-2. Function to multiply matrices
+3. Function to multiply matrices
 *********************
 
 *Notes*:
-Find transpose of the cofactor matrix of A and divide it by determinant of A we get adj A.
-Multiply it with matrix B and we get the result.
+Multiply adjA with matrix B and we get the result.
 
 *********************
 
 
-***** Codes ******
+****** Codes ******
 
 // print Matrix A
 for (int i = 0; i < row; i++) {
@@ -25,11 +23,9 @@ for (int i = 0; i < row; i++) {
 import 'dart:io';
 import 'dart:math';
 
-List<List<int>> A = []; //Matrix A
+List<List<double>> A = []; //Matrix A
 
-List<int> T = []; //Temporary array
-
-List<int> B = []; //Matrix B
+List<List<double>> B = []; //Matrix B
 
 List<String> xyz = ["x", "y", "z"]; //Matrix for storing variables
 
@@ -49,10 +45,36 @@ int row = 0;
 void main() {
   inputEquations(); //Read equations
   print("");
-  print("Determinant is ${determinant(A)}");
-  num det = determinant(A);
-  List<List<num>> transA = transpose(coFactor(A));
-  List<List<num>> adjA = adjoint(transA, det);
+  print(A);
+  print("");
+  double det = determinant(A);
+  print("Determinant is $det");
+  print("");
+  List<List<double>> coF = coFactor(A);
+  print(coF);
+  print("");
+  List<List<double>> transA = transpose(coF);
+  print(transA);
+  print("");
+  List<List<double>> adjA = adjoint(transA, det);
+  print(adjA);
+  print("");
+  print(B);
+  print("");
+  List<List<double>> xyz = multiply(adjA, B);
+  print(xyz);
+
+  // List<List<double>> K = [
+  //   [2, 4, 6],
+  //   [2, 3, 5],
+  //   [4, 8, 9]
+  // ];
+  // List<List<double>> L = [
+  //   [2, 3, 4],
+  //   [5, 6, 1],
+  //   [2, 3, 4]
+  // ];
+  // print(multiply(K, L));
 }
 
 void inputEquations() {
@@ -72,17 +94,21 @@ void inputEquations() {
   } else {
     k = 1;
   }
+  List<double> t1 = []; //Temporary array
+  List<double> t2 = []; //Temporary array
 
   //Read matrix A and B
   for (int i = 0; i < row; i++) {
     for (int j = 0; j < row; j++) {
       print("Enter value of ${constantslhs[i][j]}: ");
-      T.add(int.parse(stdin.readLineSync()!));
+      t1.add(double.parse(stdin.readLineSync()!));
     }
-    A.add(T);
-    T = [];
+    A.add(t1);
+    t1 = [];
     print("Enter value of ${constantsrhs[k][i]}: ");
-    B.add(int.parse(stdin.readLineSync()!));
+    t2.add(double.parse(stdin.readLineSync()!));
+    B.add(t2);
+    t2 = [];
   }
 
   print("");
@@ -91,21 +117,22 @@ void inputEquations() {
   print("Entered equations are:");
   if (row == 2) {
     for (int i = 0; i < row; i++) {
-      print("${A[i][0]}${X[0]}+${A[i][1]}${X[1]}=${B[i]}");
+      print("${A[i][0]}${X[0]} + ${A[i][1]}${X[1]} = ${B[i][0]}");
     }
   } else {
     for (int i = 0; i < row; i++) {
-      print("${A[i][0]}${X[0]}+${A[i][1]}${X[1]}+${A[i][2]}${X[2]}=${B[i]}");
+      print(
+          "${A[i][0]}${X[0]} + ${A[i][1]}${X[1]} + ${A[i][2]}${X[2]} = ${B[i][0]}");
     }
   }
 }
 
-List<List<int>> rcRemover(List<List<int>> F, int r, int c) {
-  List<List<int>> E = [
+List<List<double>> rcRemover(List<List<double>> F, int r, int c) {
+  List<List<double>> E = [
     [0, 0],
     [0, 0]
   ];
-  List<int> D = [];
+  List<double> D = [];
   for (int i = 0; i < row; i++) {
     for (int j = 0; j < row; j++) {
       if (i != r && j != c) {
@@ -128,8 +155,8 @@ List<List<int>> rcRemover(List<List<int>> F, int r, int c) {
   }
 }
 
-num determinant(List<List<int>> A) {
-  num result = 0;
+double determinant(List<List<double>> A) {
+  double result = 0;
   if (A.length == 3) {
     for (int i = 0; i < 3; i++) {
       result += (pow(-1, i) * A[0][i]) * determinant(rcRemover(A, 0, i));
@@ -144,14 +171,14 @@ num determinant(List<List<int>> A) {
   return result;
 }
 
-List<List<num>> coFactor(List<List<int>> A) {
-  List<num> C = [];
-  List<List<num>> P = [
+List<List<double>> coFactor(List<List<double>> A) {
+  List<double> C = [];
+  List<List<double>> P = [
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0]
   ];
-  List<List<num>> Q = [
+  List<List<double>> Q = [
     [0, 0],
     [0, 0]
   ];
@@ -187,7 +214,7 @@ List<List<num>> coFactor(List<List<int>> A) {
   }
 }
 
-List<List<num>> adjoint(List<List<num>> coF, num det) {
+List<List<double>> adjoint(List<List<double>> coF, double det) {
   for (int i = 0; i < row; i++) {
     for (int j = 0; j < row; j++) {
       coF[i][j] /= det;
@@ -196,6 +223,49 @@ List<List<num>> adjoint(List<List<num>> coF, num det) {
   return coF;
 }
 
-List<List<num>> transpose(List<List<num>> C) {
-  return [[]];
+List<List<double>> transpose(List<List<double>> C) {
+  List<List<double>> G = [];
+  print(C.length);
+  List<double> T = [];
+  for (int i = 0; i < C.length; i++) {
+    for (int j = 0; j < C.length; j++) {
+      T.add(C[j][i]);
+    }
+    G.add(T);
+    T = [];
+  }
+  return G;
+}
+
+List<List<double>> multiply(List<List<double>> matA, List<List<double>> matB) {
+  // print(matA);
+  // print(matB);
+  int r1 = matA.length;
+  int c1 = matA[0].length;
+  int r2 = matB.length;
+  int c2 = matB[0].length;
+  List<List<double>> result = [];
+  List<double> T = [];
+  print(r1);
+  print(c1);
+  print(r2);
+  print(c2);
+  double temp = 0;
+  if (r2 == c1) {
+    for (int i = 0; i < r1; ++i) {
+      for (int j = 0; j < c2; ++j) {
+        for (int k = 0; k < c1; ++k) {
+          temp += matA[i][k] * matB[k][j];
+        }
+        T.add(temp);
+        temp = 0;
+      }
+      result.add(T);
+      T = [];
+    }
+    return result;
+  } else {
+    print("Matrix multiplication not possible.");
+    return [[]];
+  }
 }
