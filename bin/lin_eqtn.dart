@@ -1,25 +1,3 @@
-/* ToDo:
-3. Function to multiply matrices
-*********************
-
-*Notes*:
-Multiply adjA with matrix B and we get the result.
-
-*********************
-
-
-****** Codes ******
-
-// print Matrix A
-for (int i = 0; i < row; i++) {
-  for (int j = 0; j < row; j++) {
-    print(A[i][j]);
-  }
-}
-
-********************
-  */
-
 import 'dart:io';
 import 'dart:math';
 
@@ -45,36 +23,15 @@ int row = 0;
 void main() {
   inputEquations(); //Read equations
   print("");
-  print(A);
-  print("");
   double det = determinant(A);
-  print("Determinant is $det");
-  print("");
   List<List<double>> coF = coFactor(A);
-  print(coF);
-  print("");
   List<List<double>> transA = transpose(coF);
-  print(transA);
-  print("");
   List<List<double>> adjA = adjoint(transA, det);
-  print(adjA);
-  print("");
-  print(B);
-  print("");
-  List<List<double>> xyz = multiply(adjA, B);
-  print(xyz);
-
-  // List<List<double>> K = [
-  //   [2, 4, 6],
-  //   [2, 3, 5],
-  //   [4, 8, 9]
-  // ];
-  // List<List<double>> L = [
-  //   [2, 3, 4],
-  //   [5, 6, 1],
-  //   [2, 3, 4]
-  // ];
-  // print(multiply(K, L));
+  List<List<double>> X = multiply(adjA, B);
+  print("Solution:");
+  for (int i = 0; i < X.length; i++) {
+    print("${xyz[i]} = ${X[i][0]}");
+  }
 }
 
 void inputEquations() {
@@ -225,7 +182,6 @@ List<List<double>> adjoint(List<List<double>> coF, double det) {
 
 List<List<double>> transpose(List<List<double>> C) {
   List<List<double>> G = [];
-  print(C.length);
   List<double> T = [];
   for (int i = 0; i < C.length; i++) {
     for (int j = 0; j < C.length; j++) {
@@ -238,20 +194,16 @@ List<List<double>> transpose(List<List<double>> C) {
 }
 
 List<List<double>> multiply(List<List<double>> matA, List<List<double>> matB) {
-  // print(matA);
-  // print(matB);
   int r1 = matA.length;
   int c1 = matA[0].length;
   int r2 = matB.length;
   int c2 = matB[0].length;
   List<List<double>> result = [];
   List<double> T = [];
-  print(r1);
-  print(c1);
-  print(r2);
-  print(c2);
   double temp = 0;
+
   if (r2 == c1) {
+    //to check if matrix multiplication is possible or not
     for (int i = 0; i < r1; ++i) {
       for (int j = 0; j < c2; ++j) {
         for (int k = 0; k < c1; ++k) {
