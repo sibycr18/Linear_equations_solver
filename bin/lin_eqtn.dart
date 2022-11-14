@@ -5,7 +5,7 @@ List<List<double>> A = []; //Matrix A
 
 List<List<double>> B = []; //Matrix B
 
-List<String> xyz = ["x", "y", "z"]; //Matrix for storing variables
+List<String> xyz = ["x", "y", "z"]; //List for storing variables
 
 List<List<String>> constantslhs = [
   ["a1", "b1", "c1"],
@@ -24,13 +24,20 @@ void main() {
   inputEquations(); //Read equations
   print("");
   double det = determinant(A);
-  List<List<double>> coF = coFactor(A);
-  List<List<double>> transA = transpose(coF);
-  List<List<double>> adjA = adjoint(transA, det);
-  List<List<double>> X = multiply(adjA, B);
-  print("Solution:");
-  for (int i = 0; i < X.length; i++) {
-    print("${xyz[i]} = ${X[i][0]}");
+
+  //handling exception when determinant is 0
+  if (det == 0) {
+    print("Math error... No solution\n");
+  } else {
+    List<List<double>> coF = coFactor(A);
+    List<List<double>> transA = transpose(coF);
+    List<List<double>> adjA = adjoint(transA, det);
+    List<List<double>> X = multiply(adjA, B);
+
+    print("Solution:");
+    for (int i = 0; i < X.length; i++) {
+      print("${xyz[i]} = ${X[i][0]}");
+    }
   }
 }
 
